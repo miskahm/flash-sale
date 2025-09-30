@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { useCart } from '../context/CartContext';
 
 interface CartSidebarProps {
@@ -54,7 +55,15 @@ export default function CartSidebar({ isOpen, onClose, onCheckout }: CartSidebar
                 key={item.id}
                 className="bg-gray-800 rounded-xl p-4 flex gap-4 items-center hover:bg-gray-700 transition-all"
               >
-                <div className="text-4xl">{item.icon}</div>
+                <div className="w-16 h-16 flex-shrink-0 bg-gradient-to-br from-purple-600 to-pink-600 rounded-lg p-2">
+                  <Image
+                    src={item.image}
+                    alt={item.name}
+                    width={60}
+                    height={60}
+                    className="object-contain w-full h-full"
+                  />
+                </div>
                 <div className="flex-1">
                   <h3 className="text-white font-semibold">{item.name}</h3>
                   <p className="text-green-400 font-bold">${item.price}</p>

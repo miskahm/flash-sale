@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Image from 'next/image';
 import { useCart } from '../context/CartContext';
 
 interface CheckoutModalProps {
@@ -122,7 +123,15 @@ export default function CheckoutModal({ isOpen, onClose, onSuccess }: CheckoutMo
                   {cart.map((item) => (
                     <div key={item.id} className="flex justify-between items-center">
                       <div className="flex items-center gap-3">
-                        <span className="text-3xl">{item.icon}</span>
+                        <div className="w-12 h-12 flex-shrink-0 bg-gradient-to-br from-purple-600 to-pink-600 rounded-lg p-2">
+                          <Image
+                            src={item.image}
+                            alt={item.name}
+                            width={48}
+                            height={48}
+                            className="object-contain w-full h-full"
+                          />
+                        </div>
                         <div>
                           <p className="text-white font-semibold">{item.name}</p>
                           <p className="text-gray-400 text-sm">Qty: {item.quantity}</p>

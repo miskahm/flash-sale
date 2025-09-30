@@ -155,6 +155,7 @@ export default function Home() {
         id: product.id,
         name: product.name,
         icon: product.icon,
+        image: product.image,
         price: product.discountedPrice,
       });
 
