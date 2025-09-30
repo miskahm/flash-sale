@@ -5,12 +5,30 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2024-12-18.acacia',
 });
 
+interface CartItem {
+  id: number;
+  name: string;
+  image: string;
+  price: number;
+  quantity: number;
+}
+
+interface CustomerInfo {
+  firstName: string;
+  lastName: string;
+  email: string;
+}
+
 export async function POST(req: NextRequest) {
   try {
-    const { items, customerInfo, shipping } = await req.json();
+    const { items, customerInfo, shipping } = await req.json() as {
+      items: CartItem[];
+      customerInfo: CustomerInfo;
+      shipping: number;
+    };
 
     // Calculate line items
-    const lineItems = items.map((item: any) => ({
+    const lineItems = items.map((item) => ({
       price_data: {
         currency: 'usd',
         product_data: {
@@ -55,10 +73,11 @@ export async function POST(req: NextRequest) {
     });
 
     return NextResponse.json({ sessionId: session.id, url: session.url });
-  } catch (err: any) {
-    console.error('Stripe error:', err);
+  } catch (err) {
+    const error = err as Error;
+    console.error('Stripe error:', error);
     return NextResponse.json(
-      { error: err.message },
+      { error: error.message },
       { status: 500 }
     );
   }

@@ -10,8 +10,8 @@ interface CheckoutModalProps {
   onSuccess: (orderNumber: string) => void;
 }
 
-export default function CheckoutModal({ isOpen, onClose, onSuccess }: CheckoutModalProps) {
-  const { cart, getCartTotal, clearCart } = useCart();
+export default function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
+  const { cart, getCartTotal } = useCart();
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
