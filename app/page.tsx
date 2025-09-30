@@ -16,13 +16,76 @@ interface Product {
   discountedPrice: number;
   totalStock: number;
   remainingStock: number;
-  timerDuration: number;
 }
 
 interface Notification {
   id: number;
   message: string;
 }
+
+// All available products pool
+const ALL_PRODUCTS: Product[] = [
+  {
+    id: 1,
+    name: 'Premium Headphones',
+    icon: '🎧',
+    image: '/images/products/headphones.png',
+    originalPrice: 299,
+    discountedPrice: 99,
+    totalStock: 50,
+    remainingStock: 12,
+  },
+  {
+    id: 2,
+    name: 'Gaming GPU RTX 4090',
+    icon: '🎮',
+    image: '/images/products/gpu.avif',
+    originalPrice: 1999,
+    discountedPrice: 1299,
+    totalStock: 20,
+    remainingStock: 5,
+  },
+  {
+    id: 3,
+    name: 'Robot Vacuum Cleaner',
+    icon: '🤖',
+    image: '/images/products/vacuum.webp',
+    originalPrice: 599,
+    discountedPrice: 299,
+    totalStock: 40,
+    remainingStock: 15,
+  },
+  {
+    id: 4,
+    name: 'Smart Watch Pro',
+    icon: '⌚',
+    image: '/images/products/headphones.png',
+    originalPrice: 499,
+    discountedPrice: 199,
+    totalStock: 30,
+    remainingStock: 8,
+  },
+  {
+    id: 5,
+    name: 'Wireless Keyboard',
+    icon: '⌨️',
+    image: '/images/products/gpu.avif',
+    originalPrice: 149,
+    discountedPrice: 59,
+    totalStock: 60,
+    remainingStock: 20,
+  },
+  {
+    id: 6,
+    name: '4K Monitor',
+    icon: '🖥️',
+    image: '/images/products/vacuum.webp',
+    originalPrice: 799,
+    discountedPrice: 399,
+    totalStock: 25,
+    remainingStock: 7,
+  },
+];
 
 export default function Home() {
   const { addToCart, getCartCount } = useCart();
@@ -31,84 +94,37 @@ export default function Home() {
   const [isConfirmationOpen, setIsConfirmationOpen] = useState(false);
   const [orderNumber, setOrderNumber] = useState('');
 
-  const [products, setProducts] = useState<Product[]>([
-    {
-      id: 1,
-      name: 'Premium Headphones',
-      icon: '🎧',
-      image: '/images/products/headphones.png',
-      originalPrice: 299,
-      discountedPrice: 99,
-      totalStock: 50,
-      remainingStock: 12,
-      timerDuration: 3600,
-    },
-    {
-      id: 2,
-      name: 'Gaming GPU RTX 4090',
-      icon: '🎮',
-      image: '/images/products/gpu.avif',
-      originalPrice: 1999,
-      discountedPrice: 1299,
-      totalStock: 20,
-      remainingStock: 5,
-      timerDuration: 2700,
-    },
-    {
-      id: 3,
-      name: 'Robot Vacuum Cleaner',
-      icon: '🤖',
-      image: '/images/products/vacuum.webp',
-      originalPrice: 599,
-      discountedPrice: 299,
-      totalStock: 40,
-      remainingStock: 15,
-      timerDuration: 4500,
-    },
-  ]);
-
-  const [globalTimer, setGlobalTimer] = useState(7200);
-  const [productTimers, setProductTimers] = useState<{ [key: number]: number }>({
-    1: 3600,
-    2: 2700,
-    3: 4500,
-  });
+  const [currentProducts, setCurrentProducts] = useState<Product[]>([]);
+  const [dealTimer, setDealTimer] = useState(3600); // 1 hour per drop
   const [viewerCount, setViewerCount] = useState(1247);
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [notificationId, setNotificationId] = useState(0);
 
-  // Global countdown timer
+  // Initialize with random 3 products
+  useEffect(() => {
+    const selectRandomProducts = () => {
+      const shuffled = [...ALL_PRODUCTS].sort(() => Math.random() - 0.5);
+      return shuffled.slice(0, 3).map(p => ({ ...p, remainingStock: p.totalStock }));
+    };
+    setCurrentProducts(selectRandomProducts());
+  }, []);
+
+  // Deal timer - rotates products when it hits 0
   useEffect(() => {
     const interval = setInterval(() => {
-      setGlobalTimer((prev) => {
-        if (prev <= 1) return 7200;
+      setDealTimer((prev) => {
+        if (prev <= 1) {
+          // Timer expired - load new products
+          const shuffled = [...ALL_PRODUCTS].sort(() => Math.random() - 0.5);
+          const newProducts = shuffled.slice(0, 3).map(p => ({ ...p, remainingStock: p.totalStock }));
+          setCurrentProducts(newProducts);
+          return 3600; // Reset to 1 hour
+        }
         return prev - 1;
       });
     }, 1000);
     return () => clearInterval(interval);
   }, []);
-
-  // Per-product timers
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setProductTimers((prev) => {
-        const updated = { ...prev };
-        Object.keys(updated).forEach((key) => {
-          const numKey = Number(key);
-          if (updated[numKey] <= 1) {
-            const product = products.find((p) => p.id === numKey);
-            if (product) {
-              updated[numKey] = product.timerDuration;
-            }
-          } else {
-            updated[numKey] -= 1;
-          }
-        });
-        return updated;
-      });
-    }, 1000);
-    return () => clearInterval(interval);
-  }, [products]);
 
   // Viewer count updates
   useEffect(() => {
@@ -120,9 +136,11 @@ export default function Home() {
 
   // Notification system
   useEffect(() => {
+    if (currentProducts.length === 0) return;
+
     const interval = setInterval(() => {
       const names = ['Sarah', 'Mike', 'Jessica', 'David', 'Emma'];
-      const productName = products[Math.floor(Math.random() * products.length)].name;
+      const productName = currentProducts[Math.floor(Math.random() * currentProducts.length)].name;
       const name = names[Math.floor(Math.random() * names.length)];
 
       const id = notificationId;
@@ -140,7 +158,7 @@ export default function Home() {
       }, 6000);
     }, 15000);
     return () => clearInterval(interval);
-  }, [notificationId, products]);
+  }, [notificationId, currentProducts]);
 
   const handleCloseNotification = (id: number) => {
     setNotifications((prev) => prev.filter((n) => n.id !== id));
@@ -163,7 +181,7 @@ export default function Home() {
         price: product.discountedPrice,
       });
 
-      setProducts((prev) =>
+      setCurrentProducts((prev) =>
         prev.map((p) =>
           p.id === product.id && p.remainingStock > 0
             ? { ...p, remainingStock: p.remainingStock - 1 }
@@ -209,9 +227,9 @@ export default function Home() {
           </h1>
           <div className="flex items-center gap-6">
             <div className="text-right hidden md:block">
-              <div className="text-sm text-white/80">Sale ends in</div>
+              <div className="text-sm text-white/80">Next drop in</div>
               <div className="text-2xl font-bold bg-gradient-to-r from-yellow-300 to-orange-400 bg-clip-text text-transparent">
-                {formatTime(globalTimer)}
+                {formatTime(dealTimer)}
               </div>
             </div>
             <button
@@ -240,7 +258,7 @@ export default function Home() {
 
         {/* Products Grid */}
         <div className="grid md:grid-cols-3 gap-8">
-          {products.map((product, index) => (
+          {currentProducts.map((product, index) => (
             <div
               key={product.id}
               className="bg-gradient-to-b from-gray-800/80 to-gray-900/80 backdrop-blur-sm rounded-2xl shadow-2xl overflow-hidden transform transition-all hover:scale-105 hover:shadow-purple-500/20 border border-white/10 animate-[scale-in_0.5s_ease-out]"
@@ -299,10 +317,10 @@ export default function Home() {
                   </div>
                 </div>
 
-                <div className="bg-gradient-to-br from-purple-900/50 to-pink-900/50 rounded-xl p-4 mb-4 text-center border border-purple-500/30">
-                  <div className="text-sm text-purple-300 mb-1">Deal expires in</div>
-                  <div className="text-3xl font-bold bg-gradient-to-r from-purple-300 to-pink-300 bg-clip-text text-transparent">
-                    {formatTime(productTimers[product.id])}
+                <div className="bg-gradient-to-br from-red-900/50 to-orange-900/50 rounded-xl p-4 mb-4 text-center border border-red-500/30">
+                  <div className="text-sm text-red-300 mb-1">⏰ Drop ends in</div>
+                  <div className="text-3xl font-bold bg-gradient-to-r from-yellow-300 to-orange-300 bg-clip-text text-transparent">
+                    {formatTime(dealTimer)}
                   </div>
                 </div>
 
