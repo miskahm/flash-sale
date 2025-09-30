@@ -215,17 +215,11 @@ export default function Home() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           {/* Past Products */}
           <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 rounded-2xl p-6 text-center border border-gray-700/30 shadow-xl">
-            <div className="text-gray-400 mb-3 font-semibold text-sm">📦 Past Deals</div>
-            <div className="flex justify-center gap-3 opacity-60">
-              <div className="w-16 h-16 bg-gradient-to-br from-purple-600 to-pink-600 rounded-lg p-2 flex items-center justify-center">
-                <Image src="/images/products/headphones.png" alt="Past deal" width={50} height={50} className="object-contain" />
-              </div>
-              <div className="w-16 h-16 bg-gradient-to-br from-purple-600 to-pink-600 rounded-lg p-2 flex items-center justify-center">
-                <Image src="/images/products/gpu.avif" alt="Past deal" width={50} height={50} className="object-contain" />
-              </div>
-              <div className="w-16 h-16 bg-gradient-to-br from-purple-600 to-pink-600 rounded-lg p-2 flex items-center justify-center">
-                <Image src="/images/products/vacuum.webp" alt="Past deal" width={50} height={50} className="object-contain" />
-              </div>
+            <div className="text-gray-400 mb-4 font-semibold">📦 Last Batch</div>
+            <div className="flex justify-center gap-4 opacity-60">
+              <Image src="/images/products/headphones.png" alt="Last batch" width={70} height={70} className="object-contain" />
+              <Image src="/images/products/gpu.avif" alt="Last batch" width={70} height={70} className="object-contain" />
+              <Image src="/images/products/vacuum.webp" alt="Last batch" width={70} height={70} className="object-contain" />
             </div>
           </div>
 
@@ -239,17 +233,11 @@ export default function Home() {
 
           {/* Upcoming Deals */}
           <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 rounded-2xl p-6 text-center border border-gray-700/30 shadow-xl">
-            <div className="text-gray-400 mb-3 font-semibold text-sm">🎁 Upcoming Deals</div>
-            <div className="flex justify-center gap-3 opacity-60">
-              <div className="w-16 h-16 bg-gradient-to-br from-purple-600 to-pink-600 rounded-lg p-2 flex items-center justify-center">
-                <Image src="/images/products/vacuum.webp" alt="Upcoming deal" width={50} height={50} className="object-contain" />
-              </div>
-              <div className="w-16 h-16 bg-gradient-to-br from-purple-600 to-pink-600 rounded-lg p-2 flex items-center justify-center">
-                <Image src="/images/products/headphones.png" alt="Upcoming deal" width={50} height={50} className="object-contain" />
-              </div>
-              <div className="w-16 h-16 bg-gradient-to-br from-purple-600 to-pink-600 rounded-lg p-2 flex items-center justify-center">
-                <Image src="/images/products/gpu.avif" alt="Upcoming deal" width={50} height={50} className="object-contain" />
-              </div>
+            <div className="text-gray-400 mb-4 font-semibold">🎁 Upcoming Batch</div>
+            <div className="flex justify-center gap-4 opacity-60">
+              <Image src="/images/products/vacuum.webp" alt="Upcoming batch" width={70} height={70} className="object-contain" />
+              <Image src="/images/products/headphones.png" alt="Upcoming batch" width={70} height={70} className="object-contain" />
+              <Image src="/images/products/gpu.avif" alt="Upcoming batch" width={70} height={70} className="object-contain" />
             </div>
           </div>
         </div>
