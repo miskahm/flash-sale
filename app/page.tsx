@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Image from 'next/image';
 import { useCart } from './context/CartContext';
 import CartSidebar from './components/CartSidebar';
 import CheckoutModal from './components/CheckoutModal';
@@ -10,6 +11,7 @@ interface Product {
   id: number;
   name: string;
   icon: string;
+  image: string;
   originalPrice: number;
   discountedPrice: number;
   totalStock: number;
@@ -34,6 +36,7 @@ export default function Home() {
       id: 1,
       name: 'Premium Headphones',
       icon: '🎧',
+      image: '/images/products/headphones.png',
       originalPrice: 299,
       discountedPrice: 99,
       totalStock: 50,
@@ -42,22 +45,24 @@ export default function Home() {
     },
     {
       id: 2,
-      name: 'Smart Watch Pro',
-      icon: '⌚',
-      originalPrice: 499,
-      discountedPrice: 199,
-      totalStock: 30,
-      remainingStock: 7,
+      name: 'Gaming GPU RTX 4090',
+      icon: '🎮',
+      image: '/images/products/gpu.avif',
+      originalPrice: 1999,
+      discountedPrice: 1299,
+      totalStock: 20,
+      remainingStock: 5,
       timerDuration: 2700,
     },
     {
       id: 3,
-      name: 'Wireless Earbuds',
-      icon: '🎵',
-      originalPrice: 199,
-      discountedPrice: 79,
-      totalStock: 100,
-      remainingStock: 23,
+      name: 'Robot Vacuum Cleaner',
+      icon: '🤖',
+      image: '/images/products/vacuum.webp',
+      originalPrice: 599,
+      discountedPrice: 299,
+      totalStock: 40,
+      remainingStock: 15,
       timerDuration: 4500,
     },
   ]);
@@ -236,9 +241,18 @@ export default function Home() {
               className="bg-gradient-to-b from-gray-800/80 to-gray-900/80 backdrop-blur-sm rounded-2xl shadow-2xl overflow-hidden transform transition-all hover:scale-105 hover:shadow-purple-500/20 border border-white/10 animate-[scale-in_0.5s_ease-out]"
               style={{ animationDelay: `${index * 0.1}s` }}
             >
-              <div className="bg-gradient-to-br from-purple-600 via-pink-600 to-orange-500 p-10 text-center relative overflow-hidden">
+              <div className="bg-gradient-to-br from-purple-600 via-pink-600 to-orange-500 p-8 text-center relative overflow-hidden">
                 <div className="absolute inset-0 bg-black/20"></div>
-                <div className="relative text-9xl mb-4 animate-[bounce-subtle_2s_ease-out_infinite]">{product.icon}</div>
+                <div className="relative flex items-center justify-center mb-4 h-48">
+                  <Image
+                    src={product.image}
+                    alt={product.name}
+                    width={200}
+                    height={200}
+                    className="object-contain drop-shadow-2xl"
+                    priority={index === 0}
+                  />
+                </div>
                 <h3 className="relative text-2xl font-bold text-white drop-shadow-lg">{product.name}</h3>
               </div>
 
