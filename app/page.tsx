@@ -211,11 +211,46 @@ export default function Home() {
           <span className="animate-[bounce-subtle_1s_ease-out_infinite]">🔥</span> {viewerCount.toLocaleString()} people viewing right now! <span className="animate-[bounce-subtle_1s_ease-out_infinite]">🔥</span>
         </div>
 
-        {/* Universal Timer */}
-        <div className="bg-gradient-to-br from-red-900/50 to-orange-900/50 rounded-2xl p-6 mb-8 text-center border-2 border-red-500/30 shadow-2xl animate-[scale-in_0.5s_ease-out]">
-          <div className="text-red-300 mb-2 font-semibold text-lg">⏰ Deal Expires In</div>
-          <div className="text-5xl font-bold bg-gradient-to-r from-yellow-300 to-orange-300 bg-clip-text text-transparent">
-            {formatTime(dealTimer)}
+        {/* Universal Timer with Past & Upcoming */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+          {/* Past Products */}
+          <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 rounded-2xl p-6 text-center border border-gray-700/30 shadow-xl">
+            <div className="text-gray-400 mb-3 font-semibold text-sm">📦 Past Deals</div>
+            <div className="flex justify-center gap-3 opacity-60">
+              <div className="w-16 h-16 bg-gradient-to-br from-purple-600 to-pink-600 rounded-lg p-2 flex items-center justify-center">
+                <Image src="/images/products/headphones.png" alt="Past deal" width={50} height={50} className="object-contain" />
+              </div>
+              <div className="w-16 h-16 bg-gradient-to-br from-purple-600 to-pink-600 rounded-lg p-2 flex items-center justify-center">
+                <Image src="/images/products/gpu.avif" alt="Past deal" width={50} height={50} className="object-contain" />
+              </div>
+              <div className="w-16 h-16 bg-gradient-to-br from-purple-600 to-pink-600 rounded-lg p-2 flex items-center justify-center">
+                <Image src="/images/products/vacuum.webp" alt="Past deal" width={50} height={50} className="object-contain" />
+              </div>
+            </div>
+          </div>
+
+          {/* Deal Expires Timer */}
+          <div className="bg-gradient-to-br from-red-900/50 to-orange-900/50 rounded-2xl p-6 text-center border-2 border-red-500/30 shadow-2xl animate-[scale-in_0.5s_ease-out]">
+            <div className="text-red-300 mb-2 font-semibold text-lg">⏰ Deal Expires In</div>
+            <div className="text-5xl font-bold bg-gradient-to-r from-yellow-300 to-orange-300 bg-clip-text text-transparent">
+              {formatTime(dealTimer)}
+            </div>
+          </div>
+
+          {/* Upcoming Deals */}
+          <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 rounded-2xl p-6 text-center border border-gray-700/30 shadow-xl">
+            <div className="text-gray-400 mb-3 font-semibold text-sm">🎁 Upcoming Deals</div>
+            <div className="flex justify-center gap-3 opacity-60">
+              <div className="w-16 h-16 bg-gradient-to-br from-purple-600 to-pink-600 rounded-lg p-2 flex items-center justify-center">
+                <Image src="/images/products/vacuum.webp" alt="Upcoming deal" width={50} height={50} className="object-contain" />
+              </div>
+              <div className="w-16 h-16 bg-gradient-to-br from-purple-600 to-pink-600 rounded-lg p-2 flex items-center justify-center">
+                <Image src="/images/products/headphones.png" alt="Upcoming deal" width={50} height={50} className="object-contain" />
+              </div>
+              <div className="w-16 h-16 bg-gradient-to-br from-purple-600 to-pink-600 rounded-lg p-2 flex items-center justify-center">
+                <Image src="/images/products/gpu.avif" alt="Upcoming deal" width={50} height={50} className="object-contain" />
+              </div>
+            </div>
           </div>
         </div>
 
