@@ -28,11 +28,16 @@ interface CustomerInfo {
 
 export async function POST(req: NextRequest) {
   try {
+    console.log('Starting checkout session creation...');
     const { items, customerInfo, shipping } = await req.json() as {
       items: CartItem[];
       customerInfo: CustomerInfo;
       shipping: number;
     };
+
+    console.log('Items:', items);
+    console.log('Customer info:', customerInfo);
+    console.log('Shipping:', shipping);
 
     // Calculate line items
     const lineItems = items.map((item) => ({
@@ -63,7 +68,10 @@ export async function POST(req: NextRequest) {
     }
 
     // Create Checkout Session
+    console.log('Initializing Stripe...');
     const stripe = getStripe();
+    console.log('Stripe initialized, creating session...');
+
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
       line_items: lineItems,
@@ -81,10 +89,15 @@ export async function POST(req: NextRequest) {
       },
     });
 
+    console.log('Session created successfully:', session.id);
     return NextResponse.json({ sessionId: session.id, url: session.url });
   } catch (err) {
     const error = err as Error;
-    console.error('Stripe error:', error);
+    console.error('Stripe error details:', {
+      message: error.message,
+      stack: error.stack,
+      name: error.name,
+    });
     return NextResponse.json(
       { error: error.message },
       { status: 500 }
