@@ -110,7 +110,19 @@ export default function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+
+    // Auto-format expiry date with slash after 2 digits
+    if (name === 'expiryDate') {
+      const numbers = value.replace(/\D/g, '');
+      let formatted = numbers;
+      if (numbers.length >= 2) {
+        formatted = numbers.slice(0, 2) + '/' + numbers.slice(2, 4);
+      }
+      setFormData((prev) => ({ ...prev, [name]: formatted }));
+    } else {
+      setFormData((prev) => ({ ...prev, [name]: value }));
+    }
+
     if (errors[name]) {
       setErrors((prev) => ({ ...prev, [name]: '' }));
     }
@@ -303,6 +315,7 @@ export default function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
                           value={formData.expiryDate}
                           onChange={handleInputChange}
                           placeholder="12/25"
+                          maxLength={5}
                           className="w-full px-4 py-2 bg-gray-800 text-white rounded-lg focus:ring-2 focus:ring-purple-500 outline-none"
                         />
                         {errors.expiryDate && <p className="text-red-400 text-xs mt-1">{errors.expiryDate}</p>}
