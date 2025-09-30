@@ -23,8 +23,8 @@ interface Notification {
   message: string;
 }
 
-// Fixed 3 products
-const PRODUCTS: Product[] = [
+// All available products
+const ALL_PRODUCTS: Product[] = [
   {
     id: 1,
     name: 'Premium Headphones',
@@ -55,7 +55,70 @@ const PRODUCTS: Product[] = [
     totalStock: 40,
     remainingStock: 15,
   },
+  {
+    id: 4,
+    name: 'Smart Watch Pro',
+    icon: '⌚',
+    image: '/images/products/smartwatch.jpg',
+    originalPrice: 499,
+    discountedPrice: 199,
+    totalStock: 30,
+    remainingStock: 8,
+  },
+  {
+    id: 5,
+    name: 'Mechanical Keyboard RGB',
+    icon: '⌨️',
+    image: '/images/products/keyboard.jpg',
+    originalPrice: 189,
+    discountedPrice: 79,
+    totalStock: 45,
+    remainingStock: 18,
+  },
+  {
+    id: 6,
+    name: '4K Ultra HD Monitor',
+    icon: '🖥️',
+    image: '/images/products/monitor.jpg',
+    originalPrice: 799,
+    discountedPrice: 449,
+    totalStock: 25,
+    remainingStock: 7,
+  },
+  {
+    id: 7,
+    name: 'Wireless Gaming Mouse',
+    icon: '🖱️',
+    image: '/images/products/mouse.jpg',
+    originalPrice: 129,
+    discountedPrice: 59,
+    totalStock: 60,
+    remainingStock: 22,
+  },
+  {
+    id: 8,
+    name: '4K Webcam HD Pro',
+    icon: '📷',
+    image: '/images/products/webcam.jpg',
+    originalPrice: 179,
+    discountedPrice: 89,
+    totalStock: 35,
+    remainingStock: 11,
+  },
+  {
+    id: 9,
+    name: 'USB-C Hub 11-in-1',
+    icon: '🔌',
+    image: '/images/products/usb-hub.jpg',
+    originalPrice: 99,
+    discountedPrice: 39,
+    totalStock: 50,
+    remainingStock: 16,
+  },
 ];
+
+// Current batch - first 3 products
+const PRODUCTS: Product[] = ALL_PRODUCTS.slice(0, 3);
 
 export default function Home() {
   const { addToCart, getCartCount } = useCart();
@@ -217,9 +280,9 @@ export default function Home() {
           <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 rounded-2xl p-6 text-center border border-gray-700/30 shadow-xl">
             <div className="text-gray-400 mb-4 font-semibold">📦 Last Batch</div>
             <div className="flex justify-center gap-4 opacity-60">
-              <Image src="/images/products/headphones.png" alt="Last batch" width={70} height={70} className="object-contain" />
-              <Image src="/images/products/gpu.avif" alt="Last batch" width={70} height={70} className="object-contain" />
-              <Image src="/images/products/vacuum.webp" alt="Last batch" width={70} height={70} className="object-contain" />
+              <Image src="/images/products/mouse.jpg" alt="Last batch" width={70} height={70} className="object-contain" />
+              <Image src="/images/products/webcam.jpg" alt="Last batch" width={70} height={70} className="object-contain" />
+              <Image src="/images/products/usb-hub.jpg" alt="Last batch" width={70} height={70} className="object-contain" />
             </div>
           </div>
 
@@ -235,9 +298,9 @@ export default function Home() {
           <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 rounded-2xl p-6 text-center border border-gray-700/30 shadow-xl">
             <div className="text-gray-400 mb-4 font-semibold">🎁 Upcoming Batch</div>
             <div className="flex justify-center gap-4 opacity-60">
-              <Image src="/images/products/vacuum.webp" alt="Upcoming batch" width={70} height={70} className="object-contain" />
-              <Image src="/images/products/headphones.png" alt="Upcoming batch" width={70} height={70} className="object-contain" />
-              <Image src="/images/products/gpu.avif" alt="Upcoming batch" width={70} height={70} className="object-contain" />
+              <Image src="/images/products/smartwatch.jpg" alt="Upcoming batch" width={70} height={70} className="object-contain" />
+              <Image src="/images/products/keyboard.jpg" alt="Upcoming batch" width={70} height={70} className="object-contain" />
+              <Image src="/images/products/monitor.jpg" alt="Upcoming batch" width={70} height={70} className="object-contain" />
             </div>
           </div>
         </div>
