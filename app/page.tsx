@@ -266,6 +266,9 @@ export default function Home() {
                     ${product.discountedPrice}
                   </span>
                 </div>
+                <p className="text-center text-gray-400 text-xs mb-4">
+                  Price includes VAT 24%
+                </p>
 
                 <div className="bg-gradient-to-r from-yellow-400 to-orange-400 rounded-xl p-4 mb-4 text-center shadow-lg">
                   <div className="text-lg font-bold text-gray-900">
@@ -350,6 +353,75 @@ export default function Home() {
           </div>
         ))}
       </div>
+
+      {/* Footer */}
+      <footer className="bg-black/40 backdrop-blur-md border-t border-white/10 mt-16">
+        <div className="max-w-7xl mx-auto px-4 py-12">
+          <div className="grid md:grid-cols-4 gap-8 mb-8">
+            {/* Company Info */}
+            <div>
+              <h3 className="text-white font-bold text-lg mb-4">Company Information</h3>
+              <p className="text-gray-300 text-sm space-y-1">
+                <span className="block">Flash Sale Oy</span>
+                <span className="block">Mannerheimintie 1</span>
+                <span className="block">00100 Helsinki, Finland</span>
+                <span className="block">Business ID: 1234567-8</span>
+                <span className="block">VAT: FI12345678</span>
+              </p>
+            </div>
+
+            {/* Contact */}
+            <div>
+              <h3 className="text-white font-bold text-lg mb-4">Contact</h3>
+              <p className="text-gray-300 text-sm space-y-1">
+                <span className="block">Email: info@flashsale.fi</span>
+                <span className="block">Phone: +358 9 1234 5678</span>
+                <span className="block">Customer Service:</span>
+                <span className="block">Mon-Fri 9:00-17:00 EET</span>
+              </p>
+            </div>
+
+            {/* Legal */}
+            <div>
+              <h3 className="text-white font-bold text-lg mb-4">Legal</h3>
+              <ul className="text-gray-300 text-sm space-y-2">
+                <li><a href="/terms" className="hover:text-white transition-colors">Terms &amp; Conditions</a></li>
+                <li><a href="/privacy" className="hover:text-white transition-colors">Privacy Policy</a></li>
+                <li><a href="/returns" className="hover:text-white transition-colors">Returns &amp; Cancellation</a></li>
+                <li><a href="/warranty" className="hover:text-white transition-colors">Warranty Information</a></li>
+              </ul>
+            </div>
+
+            {/* Payment & Shipping */}
+            <div>
+              <h3 className="text-white font-bold text-lg mb-4">Payment &amp; Shipping</h3>
+              <p className="text-gray-300 text-sm space-y-1 mb-3">
+                <span className="block font-semibold">Accepted Payment Methods:</span>
+                <span className="block">• Credit/Debit Cards (Visa, Mastercard)</span>
+                <span className="block">• Bank Transfer</span>
+                <span className="block">• Mobile Pay</span>
+              </p>
+              <p className="text-gray-300 text-sm">
+                <span className="block font-semibold">Shipping:</span>
+                <span className="block">Finland: €4.90 (Free over €50)</span>
+                <span className="block">EU: €9.90</span>
+              </p>
+            </div>
+          </div>
+
+          <div className="border-t border-white/10 pt-6 text-center">
+            <p className="text-gray-400 text-sm mb-2">
+              All prices include Finnish VAT (24%). 14-day return policy applies to all purchases.
+            </p>
+            <p className="text-gray-500 text-xs">
+              © {new Date().getFullYear()} Flash Sale Oy. All rights reserved.
+            </p>
+            <p className="text-yellow-400 text-xs mt-2 italic">
+              ⚠️ DEMO SITE: Viewer counts and purchase notifications are simulated for demonstration purposes.
+            </p>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }

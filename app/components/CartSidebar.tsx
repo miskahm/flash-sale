@@ -106,12 +106,22 @@ export default function CartSidebar({ isOpen, onClose, onCheckout }: CartSidebar
             </div>
             <div className="flex justify-between items-center text-sm text-gray-400">
               <span>Shipping:</span>
-              <span className="text-green-400 font-semibold">FREE</span>
+              <span className="text-green-400 font-semibold">
+                {getCartTotal() >= 50 ? 'FREE' : '€4.90'}
+              </span>
             </div>
+            {getCartTotal() < 50 && (
+              <p className="text-xs text-yellow-400 text-center">
+                Add €{(50 - getCartTotal()).toFixed(2)} more for free shipping!
+              </p>
+            )}
             <div className="border-t border-gray-700 pt-4 flex justify-between items-center">
               <span className="text-xl text-white font-bold">Total:</span>
-              <span className="text-2xl text-green-400 font-bold">${getCartTotal().toFixed(2)}</span>
+              <span className="text-2xl text-green-400 font-bold">
+                ${(getCartTotal() + (getCartTotal() >= 50 ? 0 : 4.90)).toFixed(2)}
+              </span>
             </div>
+            <p className="text-xs text-gray-400 text-center">Includes VAT 24%</p>
             <button
               onClick={onCheckout}
               className="w-full bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-bold py-4 rounded-xl transition-all shadow-lg hover:shadow-xl transform hover:scale-[1.02]"

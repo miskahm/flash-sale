@@ -148,16 +148,17 @@ export default function CheckoutModal({ isOpen, onClose, onSuccess }: CheckoutMo
                   </div>
                   <div className="flex justify-between text-gray-300">
                     <span>Shipping:</span>
-                    <span className="text-green-400 font-semibold">FREE</span>
-                  </div>
-                  <div className="flex justify-between text-gray-300">
-                    <span>Tax:</span>
-                    <span>${(getCartTotal() * 0.08).toFixed(2)}</span>
+                    <span className={getCartTotal() >= 50 ? "text-green-400 font-semibold" : ""}>
+                      {getCartTotal() >= 50 ? 'FREE' : '€4.90'}
+                    </span>
                   </div>
                   <div className="border-t border-white/20 pt-2 flex justify-between items-center">
                     <span className="text-xl text-white font-bold">Total:</span>
-                    <span className="text-2xl text-green-400 font-bold">${(getCartTotal() * 1.08).toFixed(2)}</span>
+                    <span className="text-2xl text-green-400 font-bold">
+                      ${(getCartTotal() + (getCartTotal() >= 50 ? 0 : 4.90)).toFixed(2)}
+                    </span>
                   </div>
+                  <p className="text-xs text-gray-400 text-center pt-2">All prices include VAT 24%</p>
                 </div>
               </div>
 
@@ -305,7 +306,7 @@ export default function CheckoutModal({ isOpen, onClose, onSuccess }: CheckoutMo
                         Processing Payment...
                       </span>
                     ) : (
-                      `💳 Pay $${(getCartTotal() * 1.08).toFixed(2)}`
+                      `💳 Pay $${(getCartTotal() + (getCartTotal() >= 50 ? 0 : 4.90)).toFixed(2)}`
                     )}
                   </button>
                 </form>
