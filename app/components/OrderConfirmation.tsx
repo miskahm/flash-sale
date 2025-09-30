@@ -86,7 +86,7 @@ export default function OrderConfirmation({ isOpen, orderNumber, onClose }: Orde
                   <div className="bg-purple-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold flex-shrink-0 mt-0.5">1</div>
                   <div>
                     <p className="text-white font-semibold">Order Processing</p>
-                    <p className="text-gray-400 text-sm">We'll prepare your items for shipping</p>
+                    <p className="text-gray-400 text-sm">We&apos;ll prepare your items for shipping</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
