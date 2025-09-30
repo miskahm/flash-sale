@@ -115,8 +115,11 @@ export default function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
     if (name === 'expiryDate') {
       const numbers = value.replace(/\D/g, '');
       let formatted = numbers;
-      if (numbers.length >= 2) {
+      if (numbers.length >= 3) {
         formatted = numbers.slice(0, 2) + '/' + numbers.slice(2, 4);
+      } else if (numbers.length === 2 && value.length === 2) {
+        // Only add slash when typing forward, not when deleting
+        formatted = numbers + '/';
       }
       setFormData((prev) => ({ ...prev, [name]: formatted }));
     } else {
