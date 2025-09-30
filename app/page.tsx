@@ -305,10 +305,10 @@ export default function Home() {
                 <button
                   onClick={() => handleAddToCart(product)}
                   disabled={product.remainingStock === 0}
-                  className={`w-full py-4 rounded-xl font-bold text-xl transition-all shadow-lg ${
+                  className={`w-full py-4 rounded-xl font-bold text-xl transition-all ${
                     product.remainingStock === 0
-                      ? 'bg-gray-600 cursor-not-allowed text-gray-400'
-                      : 'bg-gradient-to-r from-green-500 via-emerald-500 to-teal-500 hover:from-green-600 hover:via-emerald-600 hover:to-teal-600 text-white hover:shadow-2xl transform hover:scale-105'
+                      ? 'bg-gray-600 cursor-not-allowed text-gray-400 shadow-lg'
+                      : 'bg-gradient-to-r from-green-500 via-emerald-500 to-teal-500 hover:from-green-600 hover:via-emerald-600 hover:to-teal-600 text-white transform hover:scale-105 border-2 border-transparent animate-[rainbow-glow_3s_linear_infinite]'
                   }`}
                 >
                   {product.remainingStock === 0 ? '❌ SOLD OUT' : '🛒 ADD TO CART'}
