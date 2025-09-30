@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { PaymentElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import { useCart } from '../context/CartContext';
 
@@ -20,7 +20,7 @@ interface StripePaymentFormProps {
 export default function StripePaymentForm({ onSuccess, customerInfo }: StripePaymentFormProps) {
   const stripe = useStripe();
   const elements = useElements();
-  const { cart, getCartTotal, clearCart } = useCart();
+  const { getCartTotal, clearCart } = useCart();
   const [isProcessing, setIsProcessing] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
 
