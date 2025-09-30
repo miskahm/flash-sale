@@ -13,6 +13,10 @@
 - [x] Add warranty information section
 - [x] Label or remove simulated elements (viewer counts, fake purchase notifications)
 
+## Payment Integration
+
+- [ ] Implement Stripe or alternative payment provider integration
+
 ## Completed Items (2025-01-XX)
 
 ✅ **Footer with Company Information** - Added comprehensive footer with:

@@ -69,13 +69,43 @@ export default function CheckoutModal({ isOpen, onClose, onSuccess }: CheckoutMo
 
     setIsProcessing(true);
 
-    // Simulate payment processing
-    await new Promise((resolve) => setTimeout(resolve, 2000));
+    try {
+      const shippingCost = getCartTotal() >= 50 ? 0 : 4.90;
 
-    const orderNumber = `FS${Date.now().toString().slice(-8)}`;
-    clearCart();
-    setIsProcessing(false);
-    onSuccess(orderNumber);
+      // Create Stripe Checkout Session
+      const response = await fetch('/api/create-checkout-session', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          items: cart,
+          customerInfo: {
+            firstName: formData.firstName,
+            lastName: formData.lastName,
+            email: formData.email,
+          },
+          shipping: shippingCost,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (data.error) {
+        alert('Payment initialization failed: ' + data.error);
+        setIsProcessing(false);
+        return;
+      }
+
+      // Redirect to Stripe Checkout
+      if (data.url) {
+        window.location.href = data.url;
+      }
+    } catch (error) {
+      console.error('Checkout error:', error);
+      alert('An error occurred during checkout. Please try again.');
+      setIsProcessing(false);
+    }
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
