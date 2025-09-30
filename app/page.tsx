@@ -241,7 +241,7 @@ export default function Home() {
               className="bg-gradient-to-b from-gray-800/80 to-gray-900/80 backdrop-blur-sm rounded-2xl shadow-2xl overflow-hidden transform transition-all hover:scale-105 hover:shadow-purple-500/20 border border-white/10 animate-[scale-in_0.5s_ease-out]"
               style={{ animationDelay: `${index * 0.1}s` }}
             >
-              <div className="bg-gradient-to-br from-purple-600 via-pink-600 to-orange-500 p-8 text-center relative overflow-hidden">
+              <div className="bg-gradient-to-br from-purple-600 via-pink-600 to-orange-500 p-8 text-center relative overflow-hidden group">
                 <div className="absolute inset-0 bg-black/20"></div>
                 <div className="relative flex items-center justify-center mb-4 h-48">
                   <Image
@@ -249,7 +249,7 @@ export default function Home() {
                     alt={product.name}
                     width={200}
                     height={200}
-                    className="object-contain drop-shadow-2xl"
+                    className="object-contain drop-shadow-2xl transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3"
                     priority={index === 0}
                   />
                 </div>
