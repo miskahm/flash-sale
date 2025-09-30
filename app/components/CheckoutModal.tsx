@@ -165,14 +165,14 @@ export default function CheckoutModal({ isOpen, onClose, onSuccess }: CheckoutMo
                           <p className="text-gray-400 text-sm">Qty: {item.quantity}</p>
                         </div>
                       </div>
-                      <p className="text-green-400 font-bold">${(item.price * item.quantity).toFixed(2)}</p>
+                      <p className="text-green-400 font-bold">€{(item.price * item.quantity).toFixed(2)}</p>
                     </div>
                   ))}
                 </div>
                 <div className="bg-gradient-to-r from-purple-900 to-pink-900 rounded-xl p-4 space-y-2">
                   <div className="flex justify-between text-gray-300">
                     <span>Subtotal:</span>
-                    <span>${getCartTotal().toFixed(2)}</span>
+                    <span>€{getCartTotal().toFixed(2)}</span>
                   </div>
                   <div className="flex justify-between text-gray-300">
                     <span>Shipping:</span>
@@ -183,7 +183,7 @@ export default function CheckoutModal({ isOpen, onClose, onSuccess }: CheckoutMo
                   <div className="border-t border-white/20 pt-2 flex justify-between items-center">
                     <span className="text-xl text-white font-bold">Total:</span>
                     <span className="text-2xl text-green-400 font-bold">
-                      ${(getCartTotal() + (getCartTotal() >= 50 ? 0 : 4.90)).toFixed(2)}
+                      €{(getCartTotal() + (getCartTotal() >= 50 ? 0 : 4.90)).toFixed(2)}
                     </span>
                   </div>
                   <p className="text-xs text-gray-400 text-center pt-2">All prices include VAT 24%</p>

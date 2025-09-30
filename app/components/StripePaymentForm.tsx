@@ -88,7 +88,7 @@ export default function StripePaymentForm({ onSuccess, customerInfo }: StripePay
             Processing Payment...
           </span>
         ) : (
-          `💳 Pay $${(getCartTotal() + (getCartTotal() >= 50 ? 0 : 4.90)).toFixed(2)}`
+          `💳 Pay €${(getCartTotal() + (getCartTotal() >= 50 ? 0 : 4.90)).toFixed(2)}`
         )}
       </button>
     </form>

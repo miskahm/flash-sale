@@ -114,7 +114,7 @@ export default function CartSidebar({ isOpen, onClose, onCheckout }: CartSidebar
           <div className="border-t border-gray-700 p-6 space-y-4 bg-gray-900">
             <div className="flex justify-between items-center text-lg">
               <span className="text-gray-300">Subtotal:</span>
-              <span className="text-white font-bold">${getCartTotal().toFixed(2)}</span>
+              <span className="text-white font-bold">€{getCartTotal().toFixed(2)}</span>
             </div>
             <div className="flex justify-between items-center text-sm text-gray-400">
               <span>Shipping:</span>
@@ -130,7 +130,7 @@ export default function CartSidebar({ isOpen, onClose, onCheckout }: CartSidebar
             <div className="border-t border-gray-700 pt-4 flex justify-between items-center">
               <span className="text-xl text-white font-bold">Total:</span>
               <span className="text-2xl text-green-400 font-bold">
-                ${(getCartTotal() + (getCartTotal() >= 50 ? 0 : 4.90)).toFixed(2)}
+                €{(getCartTotal() + (getCartTotal() >= 50 ? 0 : 4.90)).toFixed(2)}
               </span>
             </div>
             <p className="text-xs text-gray-400 text-center">Includes VAT 24%</p>
