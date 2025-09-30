@@ -17,12 +17,12 @@ export default function CartSidebar({ isOpen, onClose, onCheckout }: CartSidebar
     <>
       {/* Backdrop */}
       <div
-        className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 animate-[fade-in_0.3s_ease-out]"
+        className="fixed inset-0 bg-black/70 backdrop-blur-sm z-[100] animate-[fade-in_0.3s_ease-out]"
         onClick={onClose}
       />
 
       {/* Sidebar */}
-      <div className="fixed right-0 top-0 h-full w-full md:w-[450px] bg-gray-900 shadow-2xl z-[60] animate-[slide-in-right_0.4s_ease-out] flex flex-col">
+      <div className="fixed right-0 top-0 h-full w-full md:w-[450px] bg-gray-900 shadow-2xl z-[110] animate-[slide-in-right_0.4s_ease-out] flex flex-col">
         {/* Header */}
         <div className="bg-gradient-to-r from-purple-600 to-pink-600 p-6 flex justify-between items-center">
           <div>
@@ -52,7 +52,7 @@ export default function CartSidebar({ isOpen, onClose, onCheckout }: CartSidebar
             cart.map((item) => (
               <div
                 key={item.id}
-                className="bg-gray-700/50 rounded-xl p-4 flex gap-4 items-center hover:bg-gray-700 transition-all"
+                className="bg-gray-800 rounded-xl p-4 flex gap-4 items-center hover:bg-gray-700 transition-all"
               >
                 <div className="text-4xl">{item.icon}</div>
                 <div className="flex-1">

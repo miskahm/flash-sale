@@ -293,7 +293,7 @@ export default function Home() {
       />
 
       {/* Toast Notifications */}
-      <div className="fixed bottom-4 right-4 space-y-2 z-[70]">
+      <div className="fixed bottom-4 right-4 space-y-2 z-50">
         {notifications.map((notification) => (
           <div
             key={notification.id}
