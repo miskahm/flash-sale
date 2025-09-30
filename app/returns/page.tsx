@@ -1,11 +1,13 @@
+import Link from 'next/link';
+
 export default function ReturnsPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-950 via-purple-900 to-pink-900">
       <header className="bg-black/40 backdrop-blur-md border-b border-white/10">
         <div className="max-w-4xl mx-auto px-4 py-6">
-          <a href="/" className="text-white hover:text-purple-300 transition-colors">
+          <Link href="/" className="text-white hover:text-purple-300 transition-colors">
             ← Back to Store
-          </a>
+          </Link>
         </div>
       </header>
 
