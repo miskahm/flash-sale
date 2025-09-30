@@ -1,8 +1,13 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
+import { Elements } from '@stripe/react-stripe-js';
+import { loadStripe } from '@stripe/stripe-js';
 import { useCart } from '../context/CartContext';
+import StripePaymentForm from './StripePaymentForm';
+
+const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
 
 interface CheckoutModalProps {
   isOpen: boolean;
@@ -10,7 +15,7 @@ interface CheckoutModalProps {
   onSuccess: (orderNumber: string) => void;
 }
 
-export default function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
+export default function CheckoutModal({ isOpen, onClose, onSuccess }: CheckoutModalProps) {
   const { cart, getCartTotal } = useCart();
   const [formData, setFormData] = useState({
     firstName: '',
@@ -20,12 +25,35 @@ export default function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
     city: '',
     state: '',
     zipCode: '',
-    cardNumber: '',
-    expiryDate: '',
-    cvv: '',
   });
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
-  const [isProcessing, setIsProcessing] = useState(false);
+  const [clientSecret, setClientSecret] = useState<string>('');
+  const [showPayment, setShowPayment] = useState(false);
+
+  useEffect(() => {
+    if (isOpen && cart.length > 0) {
+      // Create Payment Intent when modal opens
+      const shippingCost = getCartTotal() >= 50 ? 0 : 4.90;
+
+      fetch('/api/create-payment-intent', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          items: cart,
+          shipping: shippingCost,
+        }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.clientSecret) {
+            setClientSecret(data.clientSecret);
+          }
+        })
+        .catch((error) => {
+          console.error('Error creating payment intent:', error);
+        });
+    }
+  }, [isOpen, cart, getCartTotal]);
 
   if (!isOpen) return null;
 
@@ -45,90 +73,35 @@ export default function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
     else if (!/^\d{5}$/.test(formData.zipCode)) {
       newErrors.zipCode = 'ZIP code must be 5 digits';
     }
-    if (!formData.cardNumber.trim()) newErrors.cardNumber = 'Card number is required';
-    else if (!/^\d{16}$/.test(formData.cardNumber.replace(/\s/g, ''))) {
-      newErrors.cardNumber = 'Card number must be 16 digits';
-    }
-    if (!formData.expiryDate.trim()) newErrors.expiryDate = 'Expiry date is required';
-    else if (!/^\d{2}\/\d{2}$/.test(formData.expiryDate)) {
-      newErrors.expiryDate = 'Format: MM/YY';
-    }
-    if (!formData.cvv.trim()) newErrors.cvv = 'CVV is required';
-    else if (!/^\d{3}$/.test(formData.cvv)) {
-      newErrors.cvv = 'CVV must be 3 digits';
-    }
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (!validateForm()) return;
-
-    setIsProcessing(true);
-
-    try {
-      const shippingCost = getCartTotal() >= 50 ? 0 : 4.90;
-
-      // Create Stripe Checkout Session
-      const response = await fetch('/api/create-checkout-session', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          items: cart,
-          customerInfo: {
-            firstName: formData.firstName,
-            lastName: formData.lastName,
-            email: formData.email,
-          },
-          shipping: shippingCost,
-        }),
-      });
-
-      const data = await response.json();
-
-      if (data.error) {
-        alert('Payment initialization failed: ' + data.error);
-        setIsProcessing(false);
-        return;
-      }
-
-      // Redirect to Stripe Checkout
-      if (data.url) {
-        window.location.href = data.url;
-      }
-    } catch (error) {
-      console.error('Checkout error:', error);
-      alert('An error occurred during checkout. Please try again.');
-      setIsProcessing(false);
+  const handleContinueToPayment = () => {
+    if (validateForm()) {
+      setShowPayment(true);
     }
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-
-    // Auto-format expiry date with slash after 2 digits
-    if (name === 'expiryDate') {
-      const numbers = value.replace(/\D/g, '');
-      let formatted = numbers;
-      if (numbers.length >= 3) {
-        formatted = numbers.slice(0, 2) + '/' + numbers.slice(2, 4);
-      } else if (numbers.length === 2 && value.length === 2) {
-        // Only add slash when typing forward, not when deleting
-        formatted = numbers + '/';
-      }
-      setFormData((prev) => ({ ...prev, [name]: formatted }));
-    } else {
-      setFormData((prev) => ({ ...prev, [name]: value }));
-    }
-
+    setFormData((prev) => ({ ...prev, [name]: value }));
     if (errors[name]) {
       setErrors((prev) => ({ ...prev, [name]: '' }));
     }
+  };
+
+  const appearance = {
+    theme: 'night' as const,
+    variables: {
+      colorPrimary: '#a855f7',
+      colorBackground: '#1f2937',
+      colorText: '#ffffff',
+      colorDanger: '#ef4444',
+      fontFamily: 'system-ui, sans-serif',
+      borderRadius: '12px',
+    },
   };
 
   return (
@@ -207,10 +180,10 @@ export default function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
                 </div>
               </div>
 
-              {/* Checkout Form */}
+              {/* Form Section */}
               <div>
-                <form onSubmit={handleSubmit} className="space-y-4">
-                  <div>
+                {!showPayment ? (
+                  <div className="space-y-4">
                     <h3 className="text-xl font-bold text-white mb-4">Billing Information</h3>
                     <div className="grid grid-cols-2 gap-4">
                       <div>
@@ -236,7 +209,7 @@ export default function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
                         {errors.lastName && <p className="text-red-400 text-xs mt-1">{errors.lastName}</p>}
                       </div>
                     </div>
-                    <div className="mt-4">
+                    <div>
                       <label className="block text-gray-300 text-sm mb-1">Email</label>
                       <input
                         type="email"
@@ -247,7 +220,7 @@ export default function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
                       />
                       {errors.email && <p className="text-red-400 text-xs mt-1">{errors.email}</p>}
                     </div>
-                    <div className="mt-4">
+                    <div>
                       <label className="block text-gray-300 text-sm mb-1">Address</label>
                       <input
                         type="text"
@@ -258,7 +231,7 @@ export default function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
                       />
                       {errors.address && <p className="text-red-400 text-xs mt-1">{errors.address}</p>}
                     </div>
-                    <div className="grid grid-cols-2 gap-4 mt-4">
+                    <div className="grid grid-cols-2 gap-4">
                       <div>
                         <label className="block text-gray-300 text-sm mb-1">City</label>
                         <input
@@ -282,7 +255,7 @@ export default function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
                         {errors.state && <p className="text-red-400 text-xs mt-1">{errors.state}</p>}
                       </div>
                     </div>
-                    <div className="mt-4">
+                    <div>
                       <label className="block text-gray-300 text-sm mb-1">ZIP Code</label>
                       <input
                         type="text"
@@ -293,69 +266,44 @@ export default function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
                       />
                       {errors.zipCode && <p className="text-red-400 text-xs mt-1">{errors.zipCode}</p>}
                     </div>
-                  </div>
 
-                  <div className="mt-6">
-                    <h3 className="text-xl font-bold text-white mb-4">Payment Information</h3>
-                    <div>
-                      <label className="block text-gray-300 text-sm mb-1">Card Number</label>
-                      <input
-                        type="text"
-                        name="cardNumber"
-                        value={formData.cardNumber}
-                        onChange={handleInputChange}
-                        placeholder="1234 5678 9012 3456"
-                        className="w-full px-4 py-2 bg-gray-800 text-white rounded-lg focus:ring-2 focus:ring-purple-500 outline-none"
-                      />
-                      {errors.cardNumber && <p className="text-red-400 text-xs mt-1">{errors.cardNumber}</p>}
-                    </div>
-                    <div className="grid grid-cols-2 gap-4 mt-4">
-                      <div>
-                        <label className="block text-gray-300 text-sm mb-1">Expiry (MM/YY)</label>
-                        <input
-                          type="text"
-                          name="expiryDate"
-                          value={formData.expiryDate}
-                          onChange={handleInputChange}
-                          placeholder="12/25"
-                          maxLength={5}
-                          className="w-full px-4 py-2 bg-gray-800 text-white rounded-lg focus:ring-2 focus:ring-purple-500 outline-none"
-                        />
-                        {errors.expiryDate && <p className="text-red-400 text-xs mt-1">{errors.expiryDate}</p>}
-                      </div>
-                      <div>
-                        <label className="block text-gray-300 text-sm mb-1">CVV</label>
-                        <input
-                          type="text"
-                          name="cvv"
-                          value={formData.cvv}
-                          onChange={handleInputChange}
-                          placeholder="123"
-                          className="w-full px-4 py-2 bg-gray-800 text-white rounded-lg focus:ring-2 focus:ring-purple-500 outline-none"
-                        />
-                        {errors.cvv && <p className="text-red-400 text-xs mt-1">{errors.cvv}</p>}
-                      </div>
-                    </div>
+                    <button
+                      type="button"
+                      onClick={handleContinueToPayment}
+                      className="w-full mt-6 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-bold py-4 rounded-xl transition-all shadow-lg hover:shadow-xl transform hover:scale-[1.02]"
+                    >
+                      Continue to Payment
+                    </button>
                   </div>
+                ) : (
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between mb-4">
+                      <h3 className="text-xl font-bold text-white">Payment Details</h3>
+                      <button
+                        onClick={() => setShowPayment(false)}
+                        className="text-purple-400 hover:text-purple-300 text-sm font-semibold"
+                      >
+                        ← Back
+                      </button>
+                    </div>
 
-                  <button
-                    type="submit"
-                    disabled={isProcessing}
-                    className="w-full mt-6 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-bold py-4 rounded-xl transition-all shadow-lg hover:shadow-xl transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    {isProcessing ? (
-                      <span className="flex items-center justify-center gap-2">
-                        <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
+                    {clientSecret && (
+                      <Elements stripe={stripePromise} options={{ clientSecret, appearance }}>
+                        <StripePaymentForm onSuccess={onSuccess} customerInfo={formData} />
+                      </Elements>
+                    )}
+
+                    {!clientSecret && (
+                      <div className="text-center py-8">
+                        <svg className="animate-spin h-8 w-8 mx-auto text-purple-500" viewBox="0 0 24 24">
                           <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
                           <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
                         </svg>
-                        Processing Payment...
-                      </span>
-                    ) : (
-                      `💳 Pay $${(getCartTotal() + (getCartTotal() >= 50 ? 0 : 4.90)).toFixed(2)}`
+                        <p className="text-gray-400 mt-2">Loading payment form...</p>
+                      </div>
                     )}
-                  </button>
-                </form>
+                  </div>
+                )}
               </div>
             </div>
           </div>
