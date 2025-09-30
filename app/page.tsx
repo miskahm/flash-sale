@@ -250,7 +250,8 @@ export default function Home() {
                     alt={product.name}
                     width={200}
                     height={200}
-                    className="object-contain drop-shadow-2xl transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3"
+                    className="object-contain drop-shadow-2xl animate-[float_3s_ease-in-out_infinite] group-hover:scale-110"
+                    style={{ animationDelay: `${index * 0.5}s` }}
                     priority={index === 0}
                   />
                 </div>
