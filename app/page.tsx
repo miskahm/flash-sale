@@ -229,12 +229,12 @@ export default function Home() {
             >
               <div className="bg-gradient-to-br from-purple-600 via-pink-600 to-orange-500 p-8 text-center relative overflow-hidden group">
                 <div className="absolute inset-0 bg-black/20"></div>
-                <div className="relative flex items-center justify-center mb-4 h-48">
+                <div className="relative flex items-center justify-center mb-4 h-60">
                   <Image
                     src={product.image}
                     alt={product.name}
-                    width={200}
-                    height={200}
+                    width={250}
+                    height={250}
                     className="object-contain drop-shadow-2xl animate-[float_3s_ease-in-out_infinite] group-hover:scale-110"
                     style={{ animationDelay: `${index * 0.5}s` }}
                     priority={index === 0}
