@@ -1,5 +1,7 @@
 'use client';
 
+import { useEffect } from 'react';
+
 interface OrderConfirmationProps {
   isOpen: boolean;
   orderNumber: string;
@@ -7,6 +9,17 @@ interface OrderConfirmationProps {
 }
 
 export default function OrderConfirmation({ isOpen, orderNumber, onClose }: OrderConfirmationProps) {
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [isOpen]);
+
   if (!isOpen) return null;
 
   const estimatedDelivery = new Date();

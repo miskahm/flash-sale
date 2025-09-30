@@ -31,28 +31,38 @@ export default function CheckoutModal({ isOpen, onClose, onSuccess }: CheckoutMo
   const [showPayment, setShowPayment] = useState(false);
 
   useEffect(() => {
-    if (isOpen && cart.length > 0) {
-      // Create Payment Intent when modal opens
-      const shippingCost = getCartTotal() >= 50 ? 0 : 4.90;
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
 
-      fetch('/api/create-payment-intent', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          items: cart,
-          shipping: shippingCost,
-        }),
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          if (data.clientSecret) {
-            setClientSecret(data.clientSecret);
-          }
+      if (cart.length > 0) {
+        // Create Payment Intent when modal opens
+        const shippingCost = getCartTotal() >= 50 ? 0 : 4.90;
+
+        fetch('/api/create-payment-intent', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            items: cart,
+            shipping: shippingCost,
+          }),
         })
-        .catch((error) => {
-          console.error('Error creating payment intent:', error);
-        });
+          .then((res) => res.json())
+          .then((data) => {
+            if (data.clientSecret) {
+              setClientSecret(data.clientSecret);
+            }
+          })
+          .catch((error) => {
+            console.error('Error creating payment intent:', error);
+          });
+      }
+    } else {
+      document.body.style.overflow = 'unset';
     }
+
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
   }, [isOpen, cart, getCartTotal]);
 
   if (!isOpen) return null;

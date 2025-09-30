@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect } from 'react';
 import Image from 'next/image';
 import { useCart } from '../context/CartContext';
 
@@ -11,6 +12,17 @@ interface CartSidebarProps {
 
 export default function CartSidebar({ isOpen, onClose, onCheckout }: CartSidebarProps) {
   const { cart, removeFromCart, updateQuantity, getCartTotal, getCartCount } = useCart();
+
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [isOpen]);
 
   if (!isOpen) return null;
 
