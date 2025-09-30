@@ -3,6 +3,8 @@
 import { useState, useEffect } from 'react';
 import { useCart } from './context/CartContext';
 import CartSidebar from './components/CartSidebar';
+import CheckoutModal from './components/CheckoutModal';
+import OrderConfirmation from './components/OrderConfirmation';
 
 interface Product {
   id: number;
@@ -24,6 +26,8 @@ export default function Home() {
   const { addToCart, getCartCount } = useCart();
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
+  const [isConfirmationOpen, setIsConfirmationOpen] = useState(false);
+  const [orderNumber, setOrderNumber] = useState('');
 
   const [products, setProducts] = useState<Product[]>([
     {
@@ -174,6 +178,17 @@ export default function Home() {
     setIsCheckoutOpen(true);
   };
 
+  const handleOrderSuccess = (newOrderNumber: string) => {
+    setOrderNumber(newOrderNumber);
+    setIsCheckoutOpen(false);
+    setIsConfirmationOpen(true);
+  };
+
+  const handleConfirmationClose = () => {
+    setIsConfirmationOpen(false);
+    setOrderNumber('');
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-950 via-purple-900 to-pink-900">
       {/* Header */}
@@ -290,6 +305,20 @@ export default function Home() {
         isOpen={isCartOpen}
         onClose={() => setIsCartOpen(false)}
         onCheckout={handleCheckout}
+      />
+
+      {/* Checkout Modal */}
+      <CheckoutModal
+        isOpen={isCheckoutOpen}
+        onClose={() => setIsCheckoutOpen(false)}
+        onSuccess={handleOrderSuccess}
+      />
+
+      {/* Order Confirmation */}
+      <OrderConfirmation
+        isOpen={isConfirmationOpen}
+        orderNumber={orderNumber}
+        onClose={handleConfirmationClose}
       />
 
       {/* Toast Notifications */}
