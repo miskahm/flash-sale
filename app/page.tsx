@@ -137,10 +137,14 @@ export default function Home() {
 
       setTimeout(() => {
         setNotifications((prev) => prev.filter((n) => n.id !== id));
-      }, 4000);
-    }, 8000);
+      }, 6000);
+    }, 15000);
     return () => clearInterval(interval);
   }, [notificationId, products]);
+
+  const handleCloseNotification = (id: number) => {
+    setNotifications((prev) => prev.filter((n) => n.id !== id));
+  };
 
   const formatTime = (seconds: number) => {
     const h = Math.floor(seconds / 3600);
@@ -175,7 +179,7 @@ export default function Home() {
       ]);
       setTimeout(() => {
         setNotifications((prev) => prev.filter((n) => n.id !== id));
-      }, 4000);
+      }, 6000);
     }
   };
 
@@ -345,9 +349,16 @@ export default function Home() {
         {notifications.map((notification) => (
           <div
             key={notification.id}
-            className="bg-gradient-to-r from-green-600 to-emerald-600 text-white px-6 py-4 rounded-xl shadow-2xl animate-[slide-in-right_0.3s_ease-out] border border-white/20"
+            className="bg-gradient-to-r from-green-600 to-emerald-600 text-white px-6 py-4 rounded-xl shadow-2xl animate-[slide-in-right_0.3s_ease-out] border border-white/20 relative"
           >
-            <div className="flex items-center gap-2">
+            <button
+              onClick={() => handleCloseNotification(notification.id)}
+              className="absolute top-2 right-2 text-white/80 hover:text-white hover:bg-white/10 rounded-full w-6 h-6 flex items-center justify-center transition-colors"
+              aria-label="Close notification"
+            >
+              ✕
+            </button>
+            <div className="flex items-center gap-2 pr-6">
               <span className="text-xl">✓</span>
               <span className="font-semibold">{notification.message}</span>
             </div>
