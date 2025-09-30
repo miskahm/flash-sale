@@ -23,8 +23,8 @@ interface Notification {
   message: string;
 }
 
-// All available products pool
-const ALL_PRODUCTS: Product[] = [
+// Fixed 3 products
+const PRODUCTS: Product[] = [
   {
     id: 1,
     name: 'Premium Headphones',
@@ -55,36 +55,6 @@ const ALL_PRODUCTS: Product[] = [
     totalStock: 40,
     remainingStock: 15,
   },
-  {
-    id: 4,
-    name: 'Smart Watch Pro',
-    icon: '⌚',
-    image: '/images/products/headphones.png',
-    originalPrice: 499,
-    discountedPrice: 199,
-    totalStock: 30,
-    remainingStock: 8,
-  },
-  {
-    id: 5,
-    name: 'Wireless Keyboard',
-    icon: '⌨️',
-    image: '/images/products/gpu.avif',
-    originalPrice: 149,
-    discountedPrice: 59,
-    totalStock: 60,
-    remainingStock: 20,
-  },
-  {
-    id: 6,
-    name: '4K Monitor',
-    icon: '🖥️',
-    image: '/images/products/vacuum.webp',
-    originalPrice: 799,
-    discountedPrice: 399,
-    totalStock: 25,
-    remainingStock: 7,
-  },
 ];
 
 export default function Home() {
@@ -94,30 +64,17 @@ export default function Home() {
   const [isConfirmationOpen, setIsConfirmationOpen] = useState(false);
   const [orderNumber, setOrderNumber] = useState('');
 
-  const [currentProducts, setCurrentProducts] = useState<Product[]>([]);
+  const [products, setProducts] = useState<Product[]>(PRODUCTS);
   const [dealTimer, setDealTimer] = useState(3600); // 1 hour per drop
   const [viewerCount, setViewerCount] = useState(1247);
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [notificationId, setNotificationId] = useState(0);
 
-  // Initialize with random 3 products
-  useEffect(() => {
-    const selectRandomProducts = () => {
-      const shuffled = [...ALL_PRODUCTS].sort(() => Math.random() - 0.5);
-      return shuffled.slice(0, 3).map(p => ({ ...p, remainingStock: p.totalStock }));
-    };
-    setCurrentProducts(selectRandomProducts());
-  }, []);
-
-  // Deal timer - rotates products when it hits 0
+  // Deal timer countdown
   useEffect(() => {
     const interval = setInterval(() => {
       setDealTimer((prev) => {
         if (prev <= 1) {
-          // Timer expired - load new products
-          const shuffled = [...ALL_PRODUCTS].sort(() => Math.random() - 0.5);
-          const newProducts = shuffled.slice(0, 3).map(p => ({ ...p, remainingStock: p.totalStock }));
-          setCurrentProducts(newProducts);
           return 3600; // Reset to 1 hour
         }
         return prev - 1;
@@ -136,11 +93,9 @@ export default function Home() {
 
   // Notification system
   useEffect(() => {
-    if (currentProducts.length === 0) return;
-
     const interval = setInterval(() => {
       const names = ['Sarah', 'Mike', 'Jessica', 'David', 'Emma'];
-      const productName = currentProducts[Math.floor(Math.random() * currentProducts.length)].name;
+      const productName = products[Math.floor(Math.random() * products.length)].name;
       const name = names[Math.floor(Math.random() * names.length)];
 
       const id = notificationId;
@@ -158,7 +113,7 @@ export default function Home() {
       }, 6000);
     }, 15000);
     return () => clearInterval(interval);
-  }, [notificationId, currentProducts]);
+  }, [notificationId, products]);
 
   const handleCloseNotification = (id: number) => {
     setNotifications((prev) => prev.filter((n) => n.id !== id));
@@ -181,7 +136,7 @@ export default function Home() {
         price: product.discountedPrice,
       });
 
-      setCurrentProducts((prev) =>
+      setProducts((prev) =>
         prev.map((p) =>
           p.id === product.id && p.remainingStock > 0
             ? { ...p, remainingStock: p.remainingStock - 1 }
@@ -252,13 +207,21 @@ export default function Home() {
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 py-8">
         {/* Viewer Count Banner */}
-        <div className="bg-gradient-to-r from-red-600 via-red-500 to-orange-500 text-white text-center py-4 rounded-2xl mb-8 font-bold text-lg shadow-2xl animate-[scale-in_0.5s_ease-out]">
+        <div className="bg-gradient-to-r from-red-600 via-red-500 to-orange-500 text-white text-center py-4 rounded-2xl mb-4 font-bold text-lg shadow-2xl animate-[scale-in_0.5s_ease-out]">
           <span className="animate-[bounce-subtle_1s_ease-out_infinite]">🔥</span> {viewerCount.toLocaleString()} people viewing right now! <span className="animate-[bounce-subtle_1s_ease-out_infinite]">🔥</span>
+        </div>
+
+        {/* Universal Timer */}
+        <div className="bg-gradient-to-br from-red-900/50 to-orange-900/50 rounded-2xl p-6 mb-8 text-center border-2 border-red-500/30 shadow-2xl animate-[scale-in_0.5s_ease-out]">
+          <div className="text-red-300 mb-2 font-semibold text-lg">⏰ Deal Expires In</div>
+          <div className="text-5xl font-bold bg-gradient-to-r from-yellow-300 to-orange-300 bg-clip-text text-transparent">
+            {formatTime(dealTimer)}
+          </div>
         </div>
 
         {/* Products Grid */}
         <div className="grid md:grid-cols-3 gap-8">
-          {currentProducts.map((product, index) => (
+          {products.map((product, index) => (
             <div
               key={product.id}
               className="bg-gradient-to-b from-gray-800/80 to-gray-900/80 backdrop-blur-sm rounded-2xl shadow-2xl overflow-hidden transform transition-all hover:scale-105 hover:shadow-purple-500/20 border border-white/10 animate-[scale-in_0.5s_ease-out]"
@@ -314,13 +277,6 @@ export default function Home() {
                         width: `${(product.remainingStock / product.totalStock) * 100}%`,
                       }}
                     />
-                  </div>
-                </div>
-
-                <div className="bg-gradient-to-br from-red-900/50 to-orange-900/50 rounded-xl p-4 mb-4 text-center border border-red-500/30">
-                  <div className="text-sm text-red-300 mb-1">⏰ Drop ends in</div>
-                  <div className="text-3xl font-bold bg-gradient-to-r from-yellow-300 to-orange-300 bg-clip-text text-transparent">
-                    {formatTime(dealTimer)}
                   </div>
                 </div>
 
