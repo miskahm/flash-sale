@@ -250,21 +250,23 @@ export default function Home() {
               className="bg-gradient-to-b from-gray-800/80 to-gray-900/80 backdrop-blur-sm rounded-2xl shadow-2xl overflow-hidden transform transition-all hover:scale-105 hover:shadow-purple-500/20 border border-white/10 animate-[scale-in_0.5s_ease-out]"
               style={{ animationDelay: `${index * 0.1}s` }}
             >
-              <div className="bg-gradient-to-br from-purple-600 via-pink-600 to-orange-500 p-8 text-center relative overflow-hidden group">
-                <div className="absolute inset-0 bg-black/20"></div>
-                <div className="relative flex items-center justify-center mb-4 h-60">
-                  <Image
-                    src={product.image}
-                    alt={product.name}
-                    width={250}
-                    height={250}
-                    className="object-contain drop-shadow-2xl animate-[float_3s_ease-in-out_infinite] group-hover:scale-110"
-                    style={{ animationDelay: `${index * 0.5}s` }}
-                    priority={index === 0}
-                  />
+              <a href={`/product/${product.id}`} className="block">
+                <div className="bg-gradient-to-br from-purple-600 via-pink-600 to-orange-500 p-8 text-center relative overflow-hidden group">
+                  <div className="absolute inset-0 bg-black/20"></div>
+                  <div className="relative flex items-center justify-center mb-4 h-60">
+                    <Image
+                      src={product.image}
+                      alt={product.name}
+                      width={250}
+                      height={250}
+                      className="object-contain drop-shadow-2xl animate-[float_3s_ease-in-out_infinite] group-hover:scale-110"
+                      style={{ animationDelay: `${index * 0.5}s` }}
+                      priority={index === 0}
+                    />
+                  </div>
+                  <h3 className="relative text-2xl font-bold text-white drop-shadow-lg">{product.name}</h3>
                 </div>
-                <h3 className="relative text-2xl font-bold text-white drop-shadow-lg">{product.name}</h3>
-              </div>
+              </a>
 
               <div className="p-6">
                 <div className="flex items-center justify-center gap-4 mb-4">
