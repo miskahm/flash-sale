@@ -22,7 +22,7 @@ export default function CartSidebar({ isOpen, onClose, onCheckout }: CartSidebar
       />
 
       {/* Sidebar */}
-      <div className="fixed right-0 top-0 h-full w-full md:w-[450px] bg-gradient-to-b from-gray-900 to-gray-800 shadow-2xl z-50 animate-[slide-in-right_0.4s_ease-out] flex flex-col">
+      <div className="fixed right-0 top-0 h-full w-full md:w-[450px] bg-gray-900 shadow-2xl z-[60] animate-[slide-in-right_0.4s_ease-out] flex flex-col">
         {/* Header */}
         <div className="bg-gradient-to-r from-purple-600 to-pink-600 p-6 flex justify-between items-center">
           <div>
