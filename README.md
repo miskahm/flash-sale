@@ -4,6 +4,10 @@
   limited-time offers. Features real-time countdown timers, dynamic stock tracking, and an
   engaging high-conversion UI designed to drive immediate purchase decisions.
 
+<img src="https://github.com/user-attachments/assets/fd97fb9e-9f16-40f0-97a1-d48c5e441c11" style="height:auto;" alt="image" />
+
+
+
   ✨ Features
 
   - Real-Time Countdown Timers - Global and per-product countdowns that auto-reset for
