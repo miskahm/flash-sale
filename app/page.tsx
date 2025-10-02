@@ -6,7 +6,6 @@ import { useCart } from './context/CartContext';
 import CartSidebar from './components/CartSidebar';
 import CheckoutModal from './components/CheckoutModal';
 import OrderConfirmation from './components/OrderConfirmation';
-import ProductRequestModal from './components/ProductRequestModal';
 
 interface Product {
   id: number;
@@ -126,7 +125,6 @@ export default function Home() {
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
   const [isConfirmationOpen, setIsConfirmationOpen] = useState(false);
-  const [isRequestModalOpen, setIsRequestModalOpen] = useState(false);
   const [orderNumber, setOrderNumber] = useState('');
 
   const [products, setProducts] = useState<Product[]>(PRODUCTS);
