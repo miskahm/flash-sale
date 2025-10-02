@@ -6,6 +6,7 @@ import { useCart } from './context/CartContext';
 import CartSidebar from './components/CartSidebar';
 import CheckoutModal from './components/CheckoutModal';
 import OrderConfirmation from './components/OrderConfirmation';
+import ProductRequestModal from './components/ProductRequestModal';
 
 interface Product {
   id: number;
@@ -125,6 +126,7 @@ export default function Home() {
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
   const [isConfirmationOpen, setIsConfirmationOpen] = useState(false);
+  const [isRequestModalOpen, setIsRequestModalOpen] = useState(false);
   const [orderNumber, setOrderNumber] = useState('');
 
   const [products, setProducts] = useState<Product[]>(PRODUCTS);
@@ -237,6 +239,29 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-950 via-purple-900 to-pink-900">
+      {/* Demo Banner */}
+      <div className="bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500 overflow-hidden relative z-40">
+        <div className="flex animate-[scroll_15s_linear_infinite]">
+          <div className="flex items-center whitespace-nowrap py-2 px-4">
+            <span className="text-black font-bold text-lg animate-[flash_1.5s_ease-in-out_infinite]">
+              ⚠️ DEMO WEBSITE - NOT A REAL ECOMMERCE STORE - FOR DEMONSTRATION PURPOSES ONLY ⚠️
+            </span>
+            <span className="mx-8 text-black">•</span>
+            <span className="text-black font-bold text-lg animate-[flash_1.5s_ease-in-out_infinite]">
+              ⚠️ DEMO WEBSITE - NOT A REAL ECOMMERCE STORE - FOR DEMONSTRATION PURPOSES ONLY ⚠️
+            </span>
+            <span className="mx-8 text-black">•</span>
+            <span className="text-black font-bold text-lg animate-[flash_1.5s_ease-in-out_infinite]">
+              ⚠️ DEMO WEBSITE - NOT A REAL ECOMMERCE STORE - FOR DEMONSTRATION PURPOSES ONLY ⚠️
+            </span>
+            <span className="mx-8 text-black">•</span>
+            <span className="text-black font-bold text-lg animate-[flash_1.5s_ease-in-out_infinite]">
+              ⚠️ DEMO WEBSITE - NOT A REAL ECOMMERCE STORE - FOR DEMONSTRATION PURPOSES ONLY ⚠️
+            </span>
+          </div>
+        </div>
+      </div>
+
       {/* Header */}
       <header className="bg-black/40 backdrop-blur-md border-b border-white/10 sticky top-0 z-30">
         <div className="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
